@@ -1,4 +1,5 @@
 # Zabbix Templates
+converted.md
 *.log
 *.cache
 .env
