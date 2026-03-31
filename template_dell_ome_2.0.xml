@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <zabbix_export>
   <version>7.0</version>
-  <date>2026-03-31T14:00:00Z</date>
+  <date>2026-03-31T17:00:00Z</date>
   <groups>
     <group>
       <name>Templates/Server hardware</name>
@@ -11,7 +11,7 @@
     <template>
       <template>Dell OpenManage Enterprise by HTTP agent</template>
       <name>Dell OpenManage Enterprise by HTTP agent</name>
-      <description>Dell OME API monitoring template v2.0 FULL. Auto-discovery, Status/Power/Temperature/Health, Inventory (CPU/Memory/Disk/RAID/PSU/Fans/Network), Power Metrics (Instant/Avg/Max), Utilization (CPU/Memory/IO), GPU, Alerts, Session control.</description>
+      <description>Dell OME API monitoring template v2.0 FIXED. Auto-discovery, Status/Power/Temperature/Health, Inventory (CPU/Memory/Disk/RAID/PSU/Fans/Network), Power Metrics, Utilization, GPU, Alerts, Session control.</description>
       <groups>
         <group>
           <name>Templates/Server hardware</name>
@@ -217,30 +217,6 @@
               <type>STRLEN</type>
             </step>
           </preprocessing>
-        </item>
-        <item>
-          <name>OME: Device Metrics (Grouped)</name>
-          <type>HTTP_AGENT</type>
-          <key>ome.metrics.grouped</key>
-          <delay>{$METRICS_UPDATE_INTERVAL}</delay>
-          <history>7d</history>
-          <trends>0</trends>
-          <value_type>4</value_type>
-          <applications>Dell OME - Utilization</applications>
-          <url>{$OME_HOST}/api/MetricService/Metrics</url>
-          <timeout>{$OME_TIMEOUT}</timeout>
-          <headers>
-            <header>
-              <name>Content-Type</name>
-              <value>application/json</value>
-            </header>
-            <header>
-              <name>X-Auth-Token</name>
-              <value>{$OME_SESSION_ID}</value>
-            </header>
-          </headers>
-          <post_data>{"DeviceIds": [{#Id}], "MetricTypes": [1,2,3,4,9,11,12,14]}</post_data>
-          <retrieve_mode>BODY</retrieve_mode>
         </item>
         <item>
           <name>OME: Critical Alerts Count</name>
@@ -491,10 +467,8 @@
                     <parameter>$.Temperature[0].Reading</parameter>
                   </parameters>
                 </step>
-                <step>
-                  <type>°C</type>
-                </step>
               </preprocessing>
+              <units>°C</units>
             </item_prototype>
             <item_prototype>
               <name>{#DeviceName}: Health Status</name>
@@ -625,10 +599,8 @@
                     <parameter>$.InventoryInfo[0].MaxSpeed</parameter>
                   </parameters>
                 </step>
-                <step>
-                  <type>MHz</type>
-                </step>
               </preprocessing>
+              <units>MHz</units>
             </item_prototype>
             <item_prototype>
               <name>{#DeviceName}: Memory Total Size</name>
@@ -737,9 +709,6 @@
                   <parameters>
                     <parameter>$.InventoryInfo..Size</parameter>
                   </parameters>
-                </step>
-                <step>
-                  <type>regex</type>
                 </step>
               </preprocessing>
               <units>GB</units>
@@ -905,10 +874,8 @@
                     <parameter>$.SystemUpTime</parameter>
                   </parameters>
                 </step>
-                <step>
-                  <type>s</type>
-                </step>
               </preprocessing>
+              <units>s</units>
             </item_prototype>
           </item_prototypes>
           <trigger_prototypes>
