@@ -7,6 +7,8 @@
 
 **Comprehensive** template for Dell OME API monitoring with inventory, power metrics, utilization, and hardware health tracking.
 
+> ✅ **v2.0 FIXED** — Все критические ошибки исправлены, шаблон готов к использованию!
+
 ---
 
 ## 📋 Содержание
@@ -99,6 +101,8 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 1. Скачайте `template_dell_ome_2.0.xml` из [releases v2.0](https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise/releases/tag/v2.0)
 2. Импортируйте в Zabbix
+
+> ⚠️ **Важно:** Используйте только `template_dell_ome_2.0.xml` (исправленная версия). Файл `template_dell_ome_2.0_fixed.xml` удалён.
 
 ### Импорт в Zabbix
 
@@ -378,14 +382,14 @@ cd zabbix-template-api-dell-openmanage-enterprise
 zabbix-template-api-dell-openmanage-enterprise/
 ├── template_dell_ome_1.1.xml         # Шаблон v1.1 (без dashboard)
 ├── template_dell_ome_1.1_db.xml      # Шаблон v1.1 (с dashboard)
-├── template_dell_ome_2.0.xml         # Шаблон v2.0 (полная версия) ⭐
-├── generate_template_v2_full.py      # Генератор шаблона v2.0
+├── template_dell_ome_2.0.xml         # Шаблон v2.0 (полная версия, ИСПРАВЛЕН) ⭐
 ├── README.md                         # Основная документация
 ├── README_V2.md                      # Документация v2.0 (этот файл)
 ├── DASHBOARDS.md                     # Отдельные dashboards
 ├── TEMPLATE_DASHBOARDS.md            # Включение dashboard в шаблон
 ├── ANALYSIS_REPORT.md                # Отчёт по анализу v1.1
 ├── ANALYSIS_REPORT_V2.md             # Отчёт по анализу v2.0
+├── TEMPLATE_ANALYSIS_REPORT.md       # Глубокий анализ v2.0
 ├── LICENSE                           # Лицензия MIT
 ├── .gitignore                        # Git ignore file
 └── dell-openmanage-enterprise_...pdf # Документация Dell OME
@@ -401,11 +405,28 @@ MIT License - см. файл [LICENSE](LICENSE)
 
 ## 🏷️ Версии
 
-| Версия | Дата | Описание |
-| :--- | :--- | :--- |
-| **v2.0** | 2026-03-31 | Полная версия с инвентаризацией, метриками питания, утилизацией |
-| **v1.1** | 2026-03-31 | Расширенная версия с температурой, здоровьем, сессией |
-| **v1.0** | 2026-03-30 | Базовая версия |
+| Версия | Дата | Описание | Статус |
+| :--- | :--- | :--- | :--- |
+| **v2.0** | 2026-03-31 | Полная версия с инвентаризацией, метриками питания, утилизацией | ✅ ИСПРАВЛЕН |
+| **v1.1** | 2026-03-31 | Расширенная версия с температурой, здоровьем, сессией | ✅ Рабочий |
+| **v1.0** | 2026-03-30 | Базовая версия | ✅ Рабочий |
+
+---
+
+## 🔧 История исправлений v2.0
+
+### v2.0 FIXED (текущая)
+
+**Исправленные проблемы:**
+- ✅ Неверный тип preprocessing `'°C'` в temperature → перемещено в `<units>`
+- ✅ Неверный тип preprocessing `'MHz'` в cpu.maxspeed → перемещено в `<units>`
+- ✅ Неверный тип preprocessing `'s'` в uptime → перемещено в `<units>`
+- ✅ Item `ome.metrics.grouped` использует `{#Id}` вне LLD → удалён
+- ✅ regex preprocessing без параметров → исправлено
+
+**Файлы:**
+- `template_dell_ome_2.0.xml` — исправленная версия (использовать эту!)
+- `template_dell_ome_2.0_fixed.xml` — удалён (переименован в template_dell_ome_2.0.xml)
 
 ---
 
