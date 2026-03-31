@@ -1,0 +1,26 @@
+# Zabbix Templates
+*.log
+*.cache
+.env
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
+
+# Qwen settings
+.qwen/
+
+# GitHub
+.github/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Markdown
+*.md~
+
