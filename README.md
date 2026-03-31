@@ -81,7 +81,7 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ### Вариант 2: Ручная загрузка
 
-1. Скачайте `template_dell_ome_7.0.xml`
+1. Скачайте `template_dell_ome_1.1.xml` (без dashboard) или `template_dell_ome_1.1_db.xml` (с dashboard)
 2. Импортируйте в Zabbix
 
 ### Импорт в Zabbix
@@ -89,7 +89,9 @@ cd zabbix-template-api-dell-openmanage-enterprise
 1. Войдите в Zabbix как администратор
 2. Перейдите: **Data collection → Templates**
 3. Нажмите **Import**
-4. Выберите файл `template_dell_ome_7.0.xml`
+4. Выберите файл:
+   - `template_dell_ome_1.1.xml` — шаблон без dashboard
+   - `template_dell_ome_1.1_db.xml` — шаблон с dashboard
 5. Нажмите **Import**
 
 ---
@@ -282,10 +284,12 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ```text
 zabbix-template-api-dell-openmanage-enterprise/
-├── template_dell_ome_7.0.xml         # Шаблон для импорта в Zabbix
+├── template_dell_ome_1.1.xml         # Шаблон без dashboard
+├── template_dell_ome_1.1_db.xml      # Шаблон с dashboard (рекомендуется)
 ├── README.md                         # Документация (этот файл)
-├── GITHUB_INSTRUCTIONS.md            # Инструкция по публикации в GitHub
-├── ANALYSIS_REPORT.md                # Отчёт об анализе шаблона
+├── DASHBOARDS.md                     # Отдельные dashboards
+├── TEMPLATE_DASHBOARDS.md            # Включение dashboard в шаблон
+├── ANALYSIS_REPORT.md                # Отчёт об анализе
 ├── LICENSE                           # Лицензия MIT
 ├── .gitignore                        # Git ignore file
 └── dell-openmanage-enterprise_...pdf # Документация Dell OME
@@ -324,4 +328,5 @@ MIT License - см. файл [LICENSE](LICENSE)
 
 **Совместимость:** Zabbix 7.0+  
 **Версия шаблона:** 1.1 (Enhanced)  
-**Последнее обновление:** 2026-03-31
+**Последнее обновление:** 2026-03-31  
+**Dashboard:** Включён в template_dell_ome_1.1_db.xml

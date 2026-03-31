@@ -82,16 +82,19 @@ Dell OpenManage Enterprise (OME) предоставляет REST API для уп
 ### 1.4 Коды статусов
 
 **Status Codes:**
+
 - `1000` = Normal (Нормальное состояние)
 - `1001` = Warning (Предупреждение)
 - `1002` = Critical (Критическая ошибка)
 
 **PowerState Codes:**
+
 - `17` = Power On (Включено)
 - `18` = Power Off (Выключено)
 - `19` = Unknown (Неизвестно)
 
 **Health Codes:**
+
 - `0` = Unknown
 - `1` = Normal
 - `2` = Warning
@@ -152,7 +155,7 @@ Dell OpenManage Enterprise (OME) предоставляет REST API для уп
 
 ### 4.1 Компоненты
 
-```
+```text
 Dell OpenManage Enterprise by HTTP agent (v1.1)
 │
 ├── 📊 Макросы (7)
@@ -239,24 +242,29 @@ Dell OpenManage Enterprise by HTTP agent (v1.1)
 ### 5.2 Мониторинг здоровья
 
 **Item:** `ome.device[{#Id}.health]`
+
 - **URL:** `{$OME_HOST}/api/DeviceService/Devices({#Id})/SubSystemHealth`
 - **Preprocessing:** `$.HealthState`
 
 **Триггер:**
+
 - **Health Check Failed:** health != 1 (HIGH)
 
 ### 5.3 Контроль сессии API
 
 **Items:**
+
 - `ome.session.auth` — получение SessionId
 - `ome.session.status` — проверка валидности (DEPENDENT)
 
 **Триггер:**
+
 - **Session Invalid:** strlen(session) = 0 (HIGH)
 
 ### 5.4 Комбинированный DISASTER
 
 **Триггер:** CRITICAL FAILURE
+
 - **Выражение:** `last(status)=1002 AND last(connection)=0`
 - **Описание:** Устройство в критическом состоянии и потеряно соединение
 - **Приоритет:** DISASTER
@@ -289,10 +297,17 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ### 6.3 Импорт в Zabbix
 
+**Варианты:**
+
+1. **Без dashboard:** `template_dell_ome_1.1.xml`
+2. **С dashboard:** `template_dell_ome_1.1_db.xml` (рекомендуется)
+
+**Процесс импорта:**
+
 1. Войдите в Zabbix как администратор
 2. Перейдите: **Data collection → Templates**
 3. Нажмите **Import**
-4. Выберите файл `template_dell_ome_7.0.xml`
+4. Выберите файл
 5. Нажмите **Import**
 
 ### 6.4 Настройка хоста
@@ -326,13 +341,14 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 | Файл | Описание |
 | :--- | :--- |
-| `template_dell_ome_7.0.xml` | **Шаблон Zabbix 7.0 (544 строки)** |
+| `template_dell_ome_1.1.xml` | **Шаблон Zabbix 7.0 (544 строки, без dashboard)** |
+| `template_dell_ome_1.1_db.xml` | **Шаблон с dashboard (650+ строк, рекомендуется)** |
 | `README.md` | Основная документация |
 | `ANALYSIS_REPORT.md` | Этот отчёт |
-| `GITHUB_INSTRUCTIONS.md` | Инструкция по публикации в GitHub |
+| `DASHBOARDS.md` | Инструкция по отдельным dashboards |
+| `TEMPLATE_DASHBOARDS.md` | Включение dashboard в шаблон |
 | `LICENSE` | Лицензия MIT |
 | `.gitignore` | Git ignore file |
-| `.markdownlint.json` | Markdownlint конфигурация |
 | `dell-openmanage-enterprise_...pdf` | Документация Dell OME |
 
 ---
@@ -416,6 +432,7 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 **Совместимость:** Zabbix 7.0+  
 **Версия шаблона:** 1.1 (Enhanced)  
+**Dashboard:** Включён в template_dell_ome_1.1_db.xml  
 **Дата обновления:** 31 марта 2026 г.  
 **Автор:** Qwen Code Assistant  
 **GitHub:** <https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise>

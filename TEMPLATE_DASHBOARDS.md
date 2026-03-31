@@ -1,12 +1,14 @@
 # Включение Dashboards в шаблон Zabbix 7.0
 
-## Варианты добавления dashboards в template_dell_ome_7.0.xml
+## Варианты добавления dashboards в template_dell_ome_1.1.xml
+
+**Готовый файл с dashboard:** `template_dell_ome_1.1_db.xml`
 
 ---
 
 ## 📋 Вариант 1: Dashboard внутри шаблона (Zabbix 7.0+)
 
-**Рекомендуемый способ для Zabbix 7.0+**
+### Рекомендуемый способ для Zabbix 7.0+
 
 ### Структура XML
 
@@ -59,7 +61,7 @@ Dashboard добавляется **внутри** элемента `<template>`,
 
 ### Полная структура template
 
-```
+```text
 <template>
     ├── <template>          # Имя шаблона
     ├── <name>              # Видимое имя
@@ -184,7 +186,7 @@ python add_dashboard.py
 
 ### Шаг 1: Найдите место для вставки
 
-Откройте `template_dell_ome_7.0.xml` и найдите закрывающий тег `</discovery_rules>`:
+Откройте `template_dell_ome_1.1.xml` и найдите закрывающий тег `</discovery_rules>`:
 
 ```xml
       </discovery_rules>
@@ -212,7 +214,7 @@ python add_dashboard.py
 
 ```bash
 # Проверка XML
-python -c "import xml.etree.ElementTree as ET; ET.parse('template_dell_ome_7.0.xml'); print('XML Valid')"
+python -c "import xml.etree.ElementTree as ET; ET.parse('template_dell_ome_1.1_db.xml'); print('XML Valid')"
 ```
 
 ---
@@ -378,7 +380,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('template_dell_ome_7.0.x
 
 ### Сетка dashboard
 
-```
+```text
 Y=0  +----------------+----------------+
      | Problems       | System         |
      | (0,0) 12x7     | (12,0) 12x7    |
@@ -472,7 +474,7 @@ else:
 
 ## 📁 Структура файла после добавления
 
-```
+```text
 template_dell_ome_7.0.xml (с dashboard)
 ├── <zabbix_export>
 │   ├── <version>7.0</version>
