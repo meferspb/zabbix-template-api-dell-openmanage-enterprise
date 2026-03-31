@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(www.dell.com)",
+      "Bash(echo *)",
+      "Bash(python *)",
+      "Bash(del *)",
+      "Bash(rmdir *)",
+      "Bash(git init)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(echo.)",
+      "Bash(git rm *)",
+      "Bash(git push *)",
+      "Bash(findstr *)",
+      "Bash(type *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(move *)",
+      "Bash(dir *)",
+      "WebFetch(dl.dell.com)",
+      "WebFetch(github.com)",
+      "Bash(git tag *)"
+    ]
+  },
+  "$version": 3
+}
