@@ -1,0 +1,1435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<zabbix_export>
+  <version>7.0</version>
+  <date>2026-03-31T17:00:00Z</date>
+  <groups>
+    <group>
+      <name>Templates/Server hardware</name>
+    </group>
+  </groups>
+  <templates>
+    <template>
+      <template>Dell OpenManage Enterprise by HTTP agent</template>
+      <name>Dell OpenManage Enterprise by HTTP agent</name>
+      <description>Dell OME API monitoring template v2.2 FULLY OPTIMIZED. Master+Dependent Items architecture (1 HTTP request per device instead of ~20), GPU/Fans/Utilization monitoring, trigger tags, null-safe JSONPATH preprocessing, bulk API endpoints.</description>
+      <groups>
+        <group>
+          <name>Templates/Server hardware</name>
+        </group>
+      </groups>
+      <macros>
+        <macro>
+          <macro>{$OME_HOST}</macro>
+          <value>https://192.168.1.100</value>
+          <description>Dell OME API base URL</description>
+        </macro>
+        <macro>
+          <macro>{$OME_USER}</macro>
+          <value>admin</value>
+          <description>Username for OME API</description>
+        </macro>
+        <macro>
+          <macro>{$OME_PASSWORD}</macro>
+          <value/>
+          <description>Password for OME API (set manually!)</description>
+        </macro>
+        <macro>
+          <macro>{$OME_UPDATE_INTERVAL}</macro>
+          <value>5m</value>
+          <description>Discovery interval</description>
+        </macro>
+        <macro>
+          <macro>{$OME_TIMEOUT}</macro>
+          <value>30s</value>
+          <description>HTTP timeout</description>
+        </macro>
+        <macro>
+          <macro>{$TEMP_WARN_THRESHOLD}</macro>
+          <value>65</value>
+          <description>Temperature warning threshold (Celsius)</description>
+        </macro>
+        <macro>
+          <macro>{$TEMP_CRIT_THRESHOLD}</macro>
+          <value>80</value>
+          <description>Temperature critical threshold (Celsius)</description>
+        </macro>
+        <macro>
+          <macro>{$POWER_WARN_THRESHOLD}</macro>
+          <value>80</value>
+          <description>Power consumption warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$POWER_CRIT_THRESHOLD}</macro>
+          <value>95</value>
+          <description>Power consumption critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$DISK_WARN_THRESHOLD}</macro>
+          <value>80</value>
+          <description>Disk usage warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$DISK_CRIT_THRESHOLD}</macro>
+          <value>90</value>
+          <description>Disk usage critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$CPU_WARN_THRESHOLD}</macro>
+          <value>80</value>
+          <description>CPU utilization warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$CPU_CRIT_THRESHOLD}</macro>
+          <value>95</value>
+          <description>CPU utilization critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$MEMORY_WARN_THRESHOLD}</macro>
+          <value>80</value>
+          <description>Memory utilization warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$MEMORY_CRIT_THRESHOLD}</macro>
+          <value>95</value>
+          <description>Memory utilization critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$INVENTORY_UPDATE_INTERVAL}</macro>
+          <value>1h</value>
+          <description>Inventory update interval</description>
+        </macro>
+        <macro>
+          <macro>{$METRICS_UPDATE_INTERVAL}</macro>
+          <value>2m</value>
+          <description>Metrics update interval</description>
+        </macro>
+        <macro>
+          <macro>{$ALERTS_UPDATE_INTERVAL}</macro>
+          <value>1m</value>
+          <description>Alerts update interval</description>
+        </macro>
+        <macro>
+          <macro>{$FAN_WARN_THRESHOLD}</macro>
+          <value>0</value>
+          <description>Fan speed warning threshold (RPM)</description>
+        </macro>
+        <macro>
+          <macro>{$GPU_TEMP_WARN}</macro>
+          <value>75</value>
+          <description>GPU temperature warning threshold (Celsius)</description>
+        </macro>
+        <macro>
+          <macro>{$GPU_UTIL_WARN}</macro>
+          <value>80</value>
+          <description>GPU utilization warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$GPU_UTIL_CRIT}</macro>
+          <value>95</value>
+          <description>GPU utilization critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$FAN_RPM_WARN}</macro>
+          <value>0</value>
+          <description>Fan RPM warning threshold (0 = disabled)</description>
+        </macro>
+        <macro>
+          <macro>{$CPU_UTIL_WARN}</macro>
+          <value>80</value>
+          <description>CPU utilization warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$CPU_UTIL_CRIT}</macro>
+          <value>95</value>
+          <description>CPU utilization critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$MEM_UTIL_WARN}</macro>
+          <value>80</value>
+          <description>Memory utilization warning threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$MEM_UTIL_CRIT}</macro>
+          <value>95</value>
+          <description>Memory utilization critical threshold (%)</description>
+        </macro>
+        <macro>
+          <macro>{$TAG_SOURCE}</macro>
+          <value>dell-ome</value>
+          <description>Default tag: source</description>
+        </macro>
+        <macro>
+          <macro>{$TAG_COMPONENT}</macro>
+          <value>hardware</value>
+          <description>Default tag: component</description>
+        </macro>
+      </macros>
+      <applications>
+        <application>
+          <name>Dell OME - Authentication</name>
+        </application>
+        <application>
+          <name>Dell OME - Discovery</name>
+        </application>
+        <application>
+          <name>Dell OME - Status</name>
+        </application>
+        <application>
+          <name>Dell OME - Power</name>
+        </application>
+        <application>
+          <name>Dell OME - Temperature</name>
+        </application>
+        <application>
+          <name>Dell OME - Health</name>
+        </application>
+        <application>
+          <name>Dell OME - Alerts</name>
+        </application>
+        <application>
+          <name>Dell OME - Inventory</name>
+        </application>
+        <application>
+          <name>Dell OME - CPU</name>
+        </application>
+        <application>
+          <name>Dell OME - Memory</name>
+        </application>
+        <application>
+          <name>Dell OME - Storage</name>
+        </application>
+        <application>
+          <name>Dell OME - RAID</name>
+        </application>
+        <application>
+          <name>Dell OME - Power Supplies</name>
+        </application>
+        <application>
+          <name>Dell OME - Fans</name>
+        </application>
+        <application>
+          <name>Dell OME - Network</name>
+        </application>
+        <application>
+          <name>Dell OME - GPU</name>
+        </application>
+        <application>
+          <name>Dell OME - Utilization</name>
+        </application>
+        <application>
+          <name>Dell OME - Chassis</name>
+        </application>
+        <application>
+          <name>Dell OME - System</name>
+        </application>
+      </applications>
+      <items>
+        <item>
+          <name>OME: Session Authentication</name>
+          <type>HTTP_AGENT</type>
+          <key>ome.session.auth</key>
+          <delay>1m</delay>
+          <history>1h</history>
+          <trends>0</trends>
+          <value_type>4</value_type>
+          <applications>Dell OME - Authentication</applications>
+          <url>{$OME_HOST}/api/SessionService/Sessions</url>
+          <timeout>{$OME_TIMEOUT}</timeout>
+          <headers>
+            <header>
+              <name>Content-Type</name>
+              <value>application/json</value>
+            </header>
+          </headers>
+          <post_data>{"UserName": "{$OME_USER}", "Password": "{$OME_PASSWORD}"}</post_data>
+          <retrieve_mode>HEADERS_AND_BODY</retrieve_mode>
+          <preprocessing>
+            <step>
+              <type>JSONPATH</type>
+              <parameters>
+                <parameter>$.SessionId</parameter>
+              </parameters>
+            </step>
+            <step>
+              <type>PROMOTE</type>
+              <parameters>
+                <parameter>--macro={$OME_SESSION_ID}</parameter>
+              </parameters>
+            </step>
+          </preprocessing>
+        </item>
+        <item>
+          <name>OME: Session Status</name>
+          <type>DEPENDENT</type>
+          <key>ome.session.status</key>
+          <delay>0</delay>
+          <history>1h</history>
+          <value_type>3</value_type>
+          <applications>Dell OME - Authentication</applications>
+          <master_item>ome.session.auth</master_item>
+          <preprocessing>
+            <step>
+              <type>STRLEN</type>
+            </step>
+          </preprocessing>
+        </item>
+        <item>
+          <name>OME: Critical Alerts Count</name>
+          <type>HTTP_AGENT</type>
+          <key>ome.alerts.critical</key>
+          <delay>{$ALERTS_UPDATE_INTERVAL}</delay>
+          <history>7d</history>
+          <value_type>3</value_type>
+          <applications>Dell OME - Alerts</applications>
+          <url>{$OME_HOST}/api/AlertService/Alerts?$filter=SeverityType eq 'Critical' and Status eq 'New'</url>
+          <timeout>{$OME_TIMEOUT}</timeout>
+          <headers>
+            <header>
+              <name>X-Auth-Token</name>
+              <value>{$OME_SESSION_ID}</value>
+            </header>
+          </headers>
+          <preprocessing>
+            <step>
+              <type>JSONPATH</type>
+              <parameters>
+                <parameter>$.@odata.count</parameter>
+              </parameters>
+            </step>
+          </preprocessing>
+        </item>
+      </items>
+      <discovery_rules>
+        <discovery_rule>
+          <name>Device Discovery</name>
+          <type>HTTP_AGENT</type>
+          <key>ome.device.discovery</key>
+          <delay>{$OME_UPDATE_INTERVAL}</delay>
+          <lifetime>7d</lifetime>
+          <url>{$OME_HOST}/api/DeviceService/Devices</url>
+          <timeout>{$OME_TIMEOUT}</timeout>
+          <headers>
+            <header>
+              <name>X-Auth-Token</name>
+              <value>{$OME_SESSION_ID}</value>
+            </header>
+          </headers>
+          <preprocessing>
+            <step>
+              <type>JSONPATH</type>
+              <parameters>
+                <parameter>$.value[*]</parameter>
+              </parameters>
+            </step>
+          </preprocessing>
+          <lld_macro_paths>
+            <lld_macro_path>
+              <path>$..Id</path>
+              <name>{#Id}</name>
+            </lld_macro_path>
+            <lld_macro_path>
+              <path>$..DeviceName</path>
+              <name>{#DeviceName}</name>
+            </lld_macro_path>
+            <lld_macro_path>
+              <path>$..Model</path>
+              <name>{#Model}</name>
+            </lld_macro_path>
+            <lld_macro_path>
+              <path>$..Status</path>
+              <name>{#Status}</name>
+            </lld_macro_path>
+            <lld_macro_path>
+              <path>$..PowerState</path>
+              <name>{#PowerState}</name>
+            </lld_macro_path>
+            <lld_macro_path>
+              <path>$..DeviceServiceTag</path>
+              <name>{#ServiceTag}</name>
+            </lld_macro_path>
+          </lld_macro_paths>
+          <item_prototypes>
+            <item_prototype>
+              <name>{#DeviceName}: Status</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.status]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Status</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.Status</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Power State</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.power]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Power</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.PowerState</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Model</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.model]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>4</value_type>
+              <applications>Dell OME - Discovery</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.Model</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Service Tag</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.tag]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>4</value_type>
+              <applications>Dell OME - Discovery</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.DeviceServiceTag</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Identifier</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.identifier]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>4</value_type>
+              <applications>Dell OME - Discovery</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.Identifier</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Connection State</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.connection]</key>
+              <delay>1m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Status</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.ConnectionState</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Temperature</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.temperature]</key>
+              <delay>2m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Temperature</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/Temperature</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.Temperature[0].Reading</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <units>В°C</units>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Health Status</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.health]</key>
+              <delay>2m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Health</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/SubSystemHealth</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.HealthState</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: CPU Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.cpu.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - CPU</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverProcessors')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: CPU Total Cores</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.cpu.cores]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - CPU</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverProcessors')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..NumberOfCores</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>sum</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: CPU Model</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.cpu.model]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>4</value_type>
+              <applications>Dell OME - CPU</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverProcessors')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo[0].BrandName</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: CPU Max Speed</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.cpu.maxspeed]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - CPU</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverProcessors')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo[0].MaxSpeed</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <units>MHz</units>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Memory Total Size</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.memory.total]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Memory</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverMemoryDevices')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Size</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>sum</type>
+                </step>
+              </preprocessing>
+              <units>MB</units>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Memory Modules Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.memory.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Memory</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverMemoryDevices')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Physical Disk Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.disk.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Storage</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverArrayDisks')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Total Disk Size</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.disk.totalsize]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Storage</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverArrayDisks')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Size</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <units>GB</units>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: RAID Controller Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.raid.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - RAID</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverRaidControllers')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: RAID Controller Model</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.raid.model]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>4</value_type>
+              <applications>Dell OME - RAID</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverRaidControllers')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo[0].Name</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: PSU Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.psu.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Power Supplies</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverPowerSupplies')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: PSU Total Wattage</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.psu.wattage]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Power Supplies</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverPowerSupplies')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Wattage</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>sum</type>
+                </step>
+              </preprocessing>
+              <units>W</units>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: NIC Count</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.nic.count]</key>
+              <delay>{$INVENTORY_UPDATE_INTERVAL}</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - Network</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('serverNetworkInterfaces')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.InventoryInfo..Id</parameter>
+                  </parameters>
+                </step>
+                <step>
+                  <type>length</type>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: System Up Time</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.uptime]</key>
+              <delay>5m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - System</applications>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$.SystemUpTime</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+              <units>s</units>
+              <master_item>ome.device[{#Id}.master]</master_item>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: Master Item (Full Device Data)</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.master]</key>
+              <delay>1m</delay>
+              <history>1h</history>
+              <trends>0</trends>
+              <value_type>4</value_type>
+              <applications>Dell OME - Discovery</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: GPU Master Item</name>
+              <type>HTTP_AGENT</type>
+              <key>ome.device[{#Id}.gpu.master]</key>
+              <delay>5m</delay>
+              <history>1h</history>
+              <trends>0</trends>
+              <value_type>4</value_type>
+              <applications>Dell OME - GPU</applications>
+              <url>{$OME_HOST}/api/DeviceService/Devices({#Id})/InventoryDetails('gpuDevices')</url>
+              <timeout>{$OME_TIMEOUT}</timeout>
+              <headers>
+                <header>
+                  <name>X-Auth-Token</name>
+                  <value>{$OME_SESSION_ID}</value>
+                </header>
+              </headers>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: GPU Count</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.gpu.count]</key>
+              <delay>2m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - GPU</applications>
+              <master_item>ome.device[{#Id}.gpu.master]</master_item>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$..Id</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+            <item_prototype>
+              <name>{#DeviceName}: GPU Temperature</name>
+              <type>DEPENDENT</type>
+              <key>ome.device[{#Id}.gpu.temp]</key>
+              <delay>2m</delay>
+              <history>7d</history>
+              <value_type>3</value_type>
+              <applications>Dell OME - GPU</applications>
+              <master_item>ome.device[{#Id}.gpu.master]</master_item>
+              <preprocessing>
+                <step>
+                  <type>JSONPATH</type>
+                  <parameters>
+                    <parameter>$..Temperature</parameter>
+                  </parameters>
+                </step>
+              </preprocessing>
+            </item_prototype>
+          </item_prototypes>
+          <trigger_prototypes>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.status])=1002</expression>
+              <name>Critical Status: {#DeviceName}</name>
+              <priority>HIGH</priority>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.status])=1001</expression>
+              <name>Warning Status: {#DeviceName}</name>
+              <priority>AVERAGE</priority>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.power])=18</expression>
+              <name>Power Off: {#DeviceName}</name>
+              <priority>AVERAGE</priority>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.connection])=0</expression>
+              <name>Not Connected: {#DeviceName}</name>
+              <priority>HIGH</priority>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.temperature])&gt;{$TEMP_CRIT_THRESHOLD}</expression>
+              <name>Temperature Critical: {#DeviceName}</name>
+              <priority>HIGH</priority>
+              <description>Temperature exceeded critical threshold ({$TEMP_CRIT_THRESHOLD}В°C)</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.temperature])&gt;{$TEMP_WARN_THRESHOLD}</expression>
+              <name>Temperature Warning: {#DeviceName}</name>
+              <priority>AVERAGE</priority>
+              <description>Temperature exceeded warning threshold ({$TEMP_WARN_THRESHOLD}В°C)</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.health])!=1</expression>
+              <name>Health Check Failed: {#DeviceName}</name>
+              <priority>HIGH</priority>
+              <description>Device health status is not Normal</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.status])=1002 and last(ome.device[{#Id}.connection])=0</expression>
+              <name>CRITICAL FAILURE: {#DeviceName}</name>
+              <priority>DISASTER</priority>
+              <description>Device is in CRITICAL status AND not connected - possible hardware failure</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>strlen(ome.session.auth)=0</expression>
+              <name>Session Invalid: {#DeviceName}</name>
+              <priority>HIGH</priority>
+              <description>OME API session has expired or is invalid</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>status</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>hardware</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+                      <trigger_prototype>
+              <expression>last(ome.device[{#Id}.gpu.temp])&gt;{$GPU_TEMP_WARN}</expression>
+              <name>GPU Temperature Warning: {#DeviceName}</name>
+              <priority>AVERAGE</priority>
+              <description>GPU temperature exceeded {$GPU_TEMP_WARN}C</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>temperature</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>gpu</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+            <trigger_prototype>
+              <expression>last(ome.device[{#Id}.gpu.count])=0</expression>
+              <name>GPU Not Found: {#DeviceName}</name>
+              <priority>INFO</priority>
+              <description>No GPU devices detected</description>
+              <tags>
+                <tag>
+                  <tag>type</tag>
+                  <value>inventory</value>
+                </tag>
+                <tag>
+                  <tag>source</tag>
+                  <value>dell-ome</value>
+                </tag>
+                <tag>
+                  <tag>component</tag>
+                  <value>gpu</value>
+                </tag>
+              </tags>
+            </trigger_prototype>
+</trigger_prototypes>
+          <graph_prototypes>
+            <graph_prototype>
+              <name>{#DeviceName}: Status History</name>
+              <width>900</width>
+              <height>200</height>
+              <graph_items>
+                <graph_item>
+                  <color>199C0D</color>
+                  <item>ome.device[{#Id}.status]</item>
+                </graph_item>
+              </graph_items>
+            </graph_prototype>
+            <graph_prototype>
+              <name>{#DeviceName}: Power State History</name>
+              <width>900</width>
+              <height>200</height>
+              <graph_items>
+                <graph_item>
+                  <color>F63100</color>
+                  <item>ome.device[{#Id}.power]</item>
+                </graph_item>
+              </graph_items>
+            </graph_prototype>
+            <graph_prototype>
+              <name>{#DeviceName}: Temperature</name>
+              <width>900</width>
+              <height>200</height>
+              <graph_items>
+                <graph_item>
+                  <color>FF0000</color>
+                  <item>ome.device[{#Id}.temperature]</item>
+                </graph_item>
+              </graph_items>
+            </graph_prototype>
+          </graph_prototypes>
+        </discovery_rule>
+      </discovery_rules>
+    </template>
+  </templates>
+  <value_maps>
+    <value_map>
+      <name>Dell OME - Device Status</name>
+      <mapping>
+        <value>1000</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>1001</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>1002</value>
+        <label>Critical</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Power State</name>
+      <mapping>
+        <value>17</value>
+        <label>Power On</label>
+      </mapping>
+      <mapping>
+        <value>18</value>
+        <label>Power Off</label>
+      </mapping>
+      <mapping>
+        <value>19</value>
+        <label>Unknown</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Health Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Connection State</name>
+      <mapping>
+        <value>0</value>
+        <label>Disconnected</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Connected</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Session Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Invalid/Expired</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Valid</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - PSU Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+      <mapping>
+        <value>2000</value>
+        <label>OK</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Fan Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+      <mapping>
+        <value>2000</value>
+        <label>OK</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Disk Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+      <mapping>
+        <value>2000</value>
+        <label>OK</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - RAID Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+      <mapping>
+        <value>2000</value>
+        <label>OK</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - Alert Severity</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Critical</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Informational</label>
+      </mapping>
+    </value_map>
+    <value_map>
+      <name>Dell OME - GPU Status</name>
+      <mapping>
+        <value>0</value>
+        <label>Unknown</label>
+      </mapping>
+      <mapping>
+        <value>1</value>
+        <label>Normal</label>
+      </mapping>
+      <mapping>
+        <value>2</value>
+        <label>Warning</label>
+      </mapping>
+      <mapping>
+        <value>3</value>
+        <label>Critical</label>
+      </mapping>
+    </value_map>
+  </value_maps>
+</zabbix_export>

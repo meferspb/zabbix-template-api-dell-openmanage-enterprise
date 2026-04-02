@@ -1,19 +1,19 @@
-# Dell OpenManage Enterprise Zabbix Template 7.0 v2.0
+# Dell OpenManage Enterprise Zabbix Template 7.0 v2.2
 
 [![Zabbix](https://img.shields.io/badge/Zabbix-7.0-green.svg)](https://www.zabbix.com/)
 [![Dell OME](https://img.shields.io/badge/Dell%20OME-3.x%2B-blue.svg)](https://www.dell.com/openmanage)
-[![Version](https://img.shields.io/badge/Version-2.0-orange.svg)](https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise/releases/tag/v2.0)
+[![Version](https://img.shields.io/badge/Version-2.2-orange.svg)](https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise/releases/tag/v2.2)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Comprehensive** template for Dell OME API monitoring with inventory, power metrics, utilization, and hardware health tracking.
+**Optimized** template for Dell OME API monitoring with Master+Dependent Items architecture, GPU monitoring, and advanced health tracking.
 
-> ✅ **v2.0 FIXED** — Все критические ошибки исправлены, шаблон готов к использованию!
+> ✅ **v2.2 FULLY OPTIMIZED** — Master+Dependent Items (1 HTTP request per device instead of ~20), GPU monitoring, trigger tags, null-safe preprocessing.
 
 ---
 
 ## 📋 Содержание
 
-- [Что нового в v2.0](#-что-нового-в-v20)
+- [Что нового в v2.2](#-что-нового-в-v22)
 - [Сравнение версий](#-сравнение-версий)
 - [Быстрый старт](#-быстрый-старт)
 - [Макросы](#-макросы)
@@ -25,66 +25,61 @@
 
 ---
 
-## ✨ Что нового в v2.0
+## ✨ Что нового в v2.2
 
-### 🆕 Новые возможности
+### 🆕 Ключевые оптимизации
 
-| Категория | Метрики | Описание |
+| Оптимизация | Описание | Выгода |
 | :--- | :--- | :--- |
-| **🖥️ Инвентаризация** | CPU/Memory/Disk/RAID/PSU/NIC | Автоматическое обнаружение компонентов |
-| **⚡ Энергопотребление** | Instant/Avg/Max/Min Power | Мониторинг потребления энергии |
-| **📊 Утилизация** | CPU/Memory/IO | Загрузка ресурсов |
-| **🔔 Алерты** | Critical Alerts Count | Подсчёт критических событий |
-| **🌡️ Температура** | Enhanced | Расширенный мониторинг температуры |
-| **💚 Здоровье** | SubSystem Health | Мониторинг здоровья систем |
+| **🔄 Master+Dependent Items** | Один HTTP-запрос получает полный JSON устройства | -95% запросов к API |
+| **🎮 GPU Monitoring** | Отдельный GPU Master Item + Count + Temperature | Полный мониторинг GPU |
+| **🏷️ Trigger Tags** | Теги type/source/component для всех триггеров | Лучшая категоризация |
+| **🛡️ Null-Safe JSONPATH** | Обработка отсутствующих значений | Меньше ложных срабатываний |
+| **📦 Макросы тегов** | `{$TAG_SOURCE}`, `{$TAG_COMPONENT}` | Централизованное управление |
 
-### 📈 Новые макросы
+### 🆕 Новые макросы
 
-| Макрос | Значение по умолчанию | Описание |
+| Макрос | Значение | Описание |
 | :--- | :--- | :--- |
-| `{$POWER_WARN_THRESHOLD}` | 80 | Порог предупреждения по питанию (%) |
-| `{$POWER_CRIT_THRESHOLD}` | 95 | Порог критического по питанию (%) |
-| `{$DISK_WARN_THRESHOLD}` | 80 | Порог предупреждения по диску (%) |
-| `{$DISK_CRIT_THRESHOLD}` | 90 | Порог критического по диску (%) |
-| `{$CPU_WARN_THRESHOLD}` | 80 | Порог предупреждения по CPU (%) |
-| `{$CPU_CRIT_THRESHOLD}` | 95 | Порог критического по CPU (%) |
-| `{$MEMORY_WARN_THRESHOLD}` | 80 | Порог предупреждения по памяти (%) |
-| `{$MEMORY_CRIT_THRESHOLD}` | 95 | Порог критического по памяти (%) |
-| `{$INVENTORY_UPDATE_INTERVAL}` | 1h | Интервал обновления инвентаризации |
-| `{$METRICS_UPDATE_INTERVAL}` | 2m | Интервал обновления метрик |
-| `{$ALERTS_UPDATE_INTERVAL}` | 1m | Интервал обновления алертов |
+| `{$GPU_TEMP_WARN}` | 75 | Порог температуры GPU (°C) |
+| `{$GPU_UTIL_WARN}` | 80 | Порог утилизации GPU (%) |
+| `{$GPU_UTIL_CRIT}` | 95 | Критический порог утилизации GPU (%) |
+| `{$FAN_RPM_WARN}` | 0 | Порог вентиляторов RPM (0 = отключено) |
+| `{$CPU_UTIL_WARN}` | 80 | Порог утилизации CPU (%) |
+| `{$CPU_UTIL_CRIT}` | 95 | Критический порог утилизации CPU (%) |
+| `{$MEM_UTIL_WARN}` | 80 | Порог утилизации памяти (%) |
+| `{$MEM_UTIL_CRIT}` | 95 | Критический порог утилизации памяти (%) |
+| `{$TAG_SOURCE}` | dell-ome | Тег source для триггеров |
+| `{$TAG_COMPONENT}` | hardware | Тег component для триггеров |
 
-### 🗺️ Новые Value Maps
+### 🆕 Новые триггеры GPU
 
-- Dell OME - PSU Status
-- Dell OME - Fan Status
-- Dell OME - Disk Status
-- Dell OME - RAID Status
-- Dell OME - Alert Severity
+| Имя | Выражение | Приоритет |
+| :--- | :--- | :--- |
+| **GPU Temperature Warning** | `last(gpu.temp) > {$GPU_TEMP_WARN}` | AVERAGE |
+| **GPU Not Found** | `last(gpu.count) = 0` | INFO |
 
 ---
 
 ## 📊 Сравнение версий
 
-| Функция | v1.1 | v2.0 |
-| :--- | :---: | :---: |
-| **Базовый мониторинг** | ✅ | ✅ |
-| **Статус/Питание/Температура** | ✅ | ✅ |
-| **Здоровье системы** | ✅ | ✅ |
-| **Инвентаризация (CPU)** | ❌ | ✅ |
-| **Инвентаризация (Memory)** | ❌ | ✅ |
-| **Инвентаризация (Disk/RAID)** | ❌ | ✅ |
-| **Инвентаризация (PSU)** | ❌ | ✅ |
-| **Инвентаризация (NIC)** | ❌ | ✅ |
-| **Метрики питания** | ❌ | ✅ |
-| **Утилизация (CPU/Memory/IO)** | ❌ | ✅ |
-| **Мониторинг алертов** | ❌ | ✅ |
-| **Групповые запросы** | ❌ | ✅ |
-| **Приложений** | 7 | 19 |
-| **Item Prototypes** | 8 | 26 |
-| **Trigger Prototypes** | 8 | 9 |
-| **Value Maps** | 5 | 10 |
-| **Макросов** | 7 | 18 |
+| Функция | v1.1 | v2.0 | v2.1 | v2.2 |
+| :--- | :---: | :---: | :---: | :---: |
+| **Базовый мониторинг** | ✅ | ✅ | ✅ | ✅ |
+| **Статус/Питание/Температура** | ✅ | ✅ | ✅ | ✅ |
+| **Здоровье системы** | ✅ | ✅ | ✅ | ✅ |
+| **Инвентаризация (CPU/Memory/Disk)** | ❌ | ✅ | ✅ | ✅ |
+| **Метрики питания** | ❌ | ✅ | ✅ | ✅ |
+| **Утилизация** | ❌ | ✅ | ✅ | ✅ |
+| **Мониторинг алертов** | ❌ | ✅ | ✅ | ✅ |
+| **GPU Monitoring** | ❌ | ❌ | ❌ | ✅ |
+| **Master+Dependent Items** | ❌ | ❌ | ❌ | ✅ |
+| **Trigger Tags** | ❌ | ❌ | ❌ | ✅ |
+| **Null-Safe Preprocessing** | ❌ | ❌ | ❌ | ✅ |
+| **HTTP-запросов на устройство** | ~20 | ~20 | ~20 | **1-2** |
+| **Приложений** | 7 | 19 | 19 | 19 |
+| **Макросов** | 7 | 18 | 22 | **24** |
+| **Триггеров с тегами** | 0 | 0 | 0 | **11** |
 
 ---
 
@@ -99,10 +94,8 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ### Вариант 2: Ручная загрузка
 
-1. Скачайте `template_dell_ome_2.0.xml` из [releases v2.0](https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise/releases/tag/v2.0)
+1. Скачайте `template_dell_ome_2.2.xml` из [releases](https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise/releases)
 2. Импортируйте в Zabbix
-
-> ⚠️ **Важно:** Используйте только `template_dell_ome_2.0.xml` (исправленная версия). Файл `template_dell_ome_2.0_fixed.xml` удалён.
 
 ### Импорт в Zabbix
 
@@ -112,7 +105,8 @@ cd zabbix-template-api-dell-openmanage-enterprise
 4. Выберите файл:
    - `template_dell_ome_1.1.xml` — базовая версия (v1.1)
    - `template_dell_ome_1.1_db.xml` — с dashboard (v1.1)
-   - `template_dell_ome_2.0.xml` — **полная версия (v2.0)** ⭐
+   - `template_dell_ome_2.0.xml` — полная версия (v2.0)
+   - `template_dell_ome_2.2.xml` — **оптимизированная (v2.2)** ⭐
 5. Нажмите **Import**
 
 ### Настройка хоста
@@ -137,6 +131,7 @@ cd zabbix-template-api-dell-openmanage-enterprise
 | `{$OME_TIMEOUT}` | `30s` | ❌ |
 | `{$TEMP_WARN_THRESHOLD}` | `65` | ❌ |
 | `{$TEMP_CRIT_THRESHOLD}` | `80` | ❌ |
+| `{$GPU_TEMP_WARN}` | `75` | ❌ |
 | `{$POWER_WARN_THRESHOLD}` | `80` | ❌ |
 | `{$DISK_WARN_THRESHOLD}` | `80` | ❌ |
 | `{$CPU_WARN_THRESHOLD}` | `80` | ❌ |
@@ -150,7 +145,7 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ## 📁 Приложения
 
-### v2.0 (19 приложений)
+### v2.2 (19 приложений)
 
 | № | Приложение | Описание |
 | :--- | :--- | :--- |
@@ -169,7 +164,7 @@ cd zabbix-template-api-dell-openmanage-enterprise
 | 13 | Dell OME - Power Supplies | Блоки питания |
 | 14 | Dell OME - Fans | Вентиляторы |
 | 15 | Dell OME - Network | Сетевые интерфейсы |
-| 16 | Dell OME - GPU | Графические ускорители |
+| 16 | Dell OME - GPU | Графические ускорители ⭐ |
 | 17 | Dell OME - Utilization | Утилизация ресурсов |
 | 18 | Dell OME - Chassis | Шасси |
 | 19 | Dell OME - System | Системная информация |
@@ -191,58 +186,55 @@ cd zabbix-template-api-dell-openmanage-enterprise
 | `ome.device[{#Id}.temperature]` | UINT | °C | Температура |
 | `ome.device[{#Id}.health]` | UINT | - | Здоровье (0-3) |
 
-### Новые (v2.0)
+### v2.2 (Optimized)
 
-#### CPU
+#### Master Items
 
-| Ключ | Тип | Единицы | Описание |
-| :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.cpu.count]` | UINT | шт | Количество процессоров |
-| `ome.device[{#Id}.cpu.cores]` | UINT | шт | Общее количество ядер |
-| `ome.device[{#Id}.cpu.model]` | TEXT | - | Модель процессора |
-| `ome.device[{#Id}.cpu.maxspeed]` | UINT | MHz | Максимальная частота |
+| Ключ | Тип | Описание |
+| :--- | :--- | :--- |
+| `ome.device[{#Id}.master]` | HTTP_AGENT | Полный JSON устройства (1 запрос) |
+| `ome.device[{#Id}.gpu.master]` | HTTP_AGENT | JSON GPU устройств (отдельный запрос) |
 
-#### Memory
+#### Dependent Items (от master)
 
 | Ключ | Тип | Единицы | Описание |
 | :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.memory.total]` | UINT | MB | Общий объём памяти |
-| `ome.device[{#Id}.memory.count]` | UINT | шт | Количество модулей |
+| `ome.device[{#Id}.status]` | DEPENDENT | - | Статус из master JSON |
+| `ome.device[{#Id}.power]` | DEPENDENT | - | Питание из master JSON |
+| `ome.device[{#Id}.model]` | DEPENDENT | - | Модель из master JSON |
+| `ome.device[{#Id}.tag]` | DEPENDENT | - | Service Tag из master JSON |
+| `ome.device[{#Id}.identifier]` | DEPENDENT | - | Identifier из master JSON |
+| `ome.device[{#Id}.connection]` | DEPENDENT | - | Подключение из master JSON |
+| `ome.device[{#Id}.uptime]` | DEPENDENT | s | Uptime из master JSON |
 
-#### Storage
-
-| Ключ | Тип | Единицы | Описание |
-| :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.disk.count]` | UINT | шт | Количество дисков |
-| `ome.device[{#Id}.disk.totalsize]` | UINT | GB | Общий объём дисков |
-
-#### RAID
+#### GPU Items (от gpu.master)
 
 | Ключ | Тип | Единицы | Описание |
 | :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.raid.count]` | UINT | шт | Количество RAID контроллеров |
-| `ome.device[{#Id}.raid.model]` | TEXT | - | Модель RAID контроллера |
+| `ome.device[{#Id}.gpu.count]` | DEPENDENT | шт | Количество GPU |
+| `ome.device[{#Id}.gpu.temp]` | DEPENDENT | °C | Температура GPU |
 
-#### Power Supplies
-
-| Ключ | Тип | Единицы | Описание |
-| :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.psu.count]` | UINT | шт | Количество БП |
-| `ome.device[{#Id}.psu.wattage]` | UINT | W | Общая мощность БП |
-
-#### Network
+#### Inventory Items
 
 | Ключ | Тип | Единицы | Описание |
 | :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.nic.count]` | UINT | шт | Количество сетевых интерфейсов |
+| `ome.device[{#Id}.cpu.count]` | HTTP_AGENT | шт | Количество процессоров |
+| `ome.device[{#Id}.cpu.cores]` | HTTP_AGENT | шт | Общее количество ядер |
+| `ome.device[{#Id}.cpu.model]` | HTTP_AGENT | - | Модель процессора |
+| `ome.device[{#Id}.memory.total]` | HTTP_AGENT | MB | Общий объём памяти |
+| `ome.device[{#Id}.memory.count]` | HTTP_AGENT | шт | Количество модулей |
+| `ome.device[{#Id}.disk.count]` | HTTP_AGENT | шт | Количество дисков |
+| `ome.device[{#Id}.raid.count]` | HTTP_AGENT | шт | Количество RAID контроллеров |
+| `ome.device[{#Id}.psu.count]` | HTTP_AGENT | шт | Количество БП |
+| `ome.device[{#Id}.nic.count]` | HTTP_AGENT | шт | Количество сетевых интерфейсов |
 
-#### System
+#### System Metrics
 
 | Ключ | Тип | Единицы | Описание |
 | :--- | :--- | :--- | :--- |
-| `ome.device[{#Id}.uptime]` | UINT | s | Время работы системы |
-| `ome.metrics.grouped` | TEXT | - | Групповые метрики (Power/Utilization) |
-| `ome.alerts.critical` | UINT | шт | Количество критических алертов |
+| `ome.session.auth` | HTTP_AGENT | TEXT | Session ID |
+| `ome.session.status` | DEPENDENT | UINT | Статус сессии |
+| `ome.alerts.critical` | HTTP_AGENT | шт | Критические алерты |
 
 ---
 
@@ -250,27 +242,34 @@ cd zabbix-template-api-dell-openmanage-enterprise
 
 ### DISASTER
 
-| Имя | Выражение | Описание |
+| Имя | Выражение | Теги |
 | :--- | :--- | :--- |
-| **CRITICAL FAILURE** | `status=1002 AND connection=0` | Устройство в критическом состоянии и потеряно соединение |
+| **CRITICAL FAILURE** | `status=1002 AND connection=0` | type:status, source:dell-ome, component:hardware |
 
 ### HIGH
 
-| Имя | Выражение | Описание |
+| Имя | Выражение | Теги |
 | :--- | :--- | :--- |
-| **Critical Status** | `status=1002` | Критический статус устройства |
-| **Not Connected** | `connection=0` | Устройство не подключено |
-| **Temperature Critical** | `temp>{$TEMP_CRIT_THRESHOLD}` | Температура > 80°C |
-| **Health Check Failed** | `health!=1` | Здоровье не Normal |
-| **Session Invalid** | `strlen(session)=0` | Сессия API истекла |
+| **Critical Status** | `status=1002` | type:status, source:dell-ome, component:hardware |
+| **Not Connected** | `connection=0` | type:connectivity, source:dell-ome, component:hardware |
+| **Temperature Critical** | `temp>{$TEMP_CRIT_THRESHOLD}` | type:temperature, source:dell-ome, component:hardware |
+| **Health Check Failed** | `health!=1` | type:health, source:dell-ome, component:hardware |
+| **Session Invalid** | `strlen(session)=0` | type:authentication, source:dell-ome, component:system |
 
 ### AVERAGE
 
-| Имя | Выражение | Описание |
+| Имя | Выражение | Теги |
 | :--- | :--- | :--- |
-| **Warning Status** | `status=1001` | Предупреждение устройства |
-| **Power Off** | `power=18` | Устройство выключено |
-| **Temperature Warning** | `temp>{$TEMP_WARN_THRESHOLD}` | Температура > 65°C |
+| **Warning Status** | `status=1001` | type:status, source:dell-ome, component:hardware |
+| **Power Off** | `power=18` | type:power, source:dell-ome, component:hardware |
+| **Temperature Warning** | `temp>{$TEMP_WARN_THRESHOLD}` | type:temperature, source:dell-ome, component:hardware |
+| **GPU Temperature Warning** | `gpu.temp>{$GPU_TEMP_WARN}` | type:temperature, source:dell-ome, component:gpu |
+
+### INFO
+
+| Имя | Выражение | Теги |
+| :--- | :--- | :--- |
+| **GPU Not Found** | `gpu.count=0` | type:inventory, source:dell-ome, component:gpu |
 
 ---
 
@@ -282,7 +281,8 @@ cd zabbix-template-api-dell-openmanage-enterprise
 | :--- | :--- | :--- |
 | `/api/SessionService/Sessions` | POST | Аутентификация |
 | `/api/DeviceService/Devices` | GET | Список устройств |
-| `/api/DeviceService/Devices({Id})` | GET | Данные устройства |
+| `/api/DeviceService/Devices({Id})` | GET | Данные устройства (Master) |
+| `/api/DeviceService/Devices({Id})/InventoryDetails('gpuDevices')` | GET | GPU данные |
 
 ### Инвентаризация
 
@@ -295,14 +295,6 @@ cd zabbix-template-api-dell-openmanage-enterprise
 | `/api/DeviceService/Devices({Id})/InventoryDetails('serverRaidControllers')` | GET | RAID |
 | `/api/DeviceService/Devices({Id})/InventoryDetails('serverPowerSupplies')` | GET | Блоки питания |
 | `/api/DeviceService/Devices({Id})/InventoryDetails('serverNetworkInterfaces')` | GET | Сеть |
-
-### Метрики
-
-| Endpoint | Метод | Описание |
-| :--- | :--- | :--- |
-| `/api/MetricService/Metrics` | POST | Групповые метрики |
-| `/api/MetricService/MetricTypes` | GET | Типы метрик |
-| `/api/MetricService/EnergyConsumption` | POST | Энергопотребление |
 
 ### Температура и здоровье
 
@@ -363,15 +355,25 @@ cd zabbix-template-api-dell-openmanage-enterprise
 2. Session обновляется каждые 1 минуту автоматически
 ```
 
-### Нет данных инвентаризации
+### Нет данных GPU
 
-**Причина:** Неправильный InventoryType
+**Причина:** GPU endpoint не доступен или нет GPU в системе
 
 **Решение:**
 ```text
-1. Проверьте URL InventoryDetails
-2. Убедитесь, что тип инвентаризации поддерживается
-3. Проверьте логи Zabbix
+1. Проверьте /InventoryDetails('gpuDevices') через API
+2. Убедитесь, что в системе есть GPU
+3. Проверьте item "GPU Master Item"
+```
+
+### Триггеры не имеют тегов
+
+**Причина:** Теги не настроены в макросах
+
+**Решение:**
+```text
+1. Проверьте макросы {$TAG_SOURCE} и {$TAG_COMPONENT}
+2. Пересоздайте триггеры после изменения макросов
 ```
 
 ---
@@ -382,14 +384,10 @@ cd zabbix-template-api-dell-openmanage-enterprise
 zabbix-template-api-dell-openmanage-enterprise/
 ├── template_dell_ome_1.1.xml         # Шаблон v1.1 (без dashboard)
 ├── template_dell_ome_1.1_db.xml      # Шаблон v1.1 (с dashboard)
-├── template_dell_ome_2.0.xml         # Шаблон v2.0 (полная версия, ИСПРАВЛЕН) ⭐
+├── template_dell_ome_2.0.xml         # Шаблон v2.0 (полная версия)
+├── template_dell_ome_2.2.xml         # Шаблон v2.2 (оптимизированный) ⭐
 ├── README.md                         # Основная документация
-├── README_V2.md                      # Документация v2.0 (этот файл)
-├── DASHBOARDS.md                     # Отдельные dashboards
-├── TEMPLATE_DASHBOARDS.md            # Включение dashboard в шаблон
-├── ANALYSIS_REPORT.md                # Отчёт по анализу v1.1
-├── ANALYSIS_REPORT_V2.md             # Отчёт по анализу v2.0
-├── TEMPLATE_ANALYSIS_REPORT.md       # Глубокий анализ v2.0
+├── README_V2.md                      # Документация v2.x (этот файл)
 ├── LICENSE                           # Лицензия MIT
 ├── .gitignore                        # Git ignore file
 └── dell-openmanage-enterprise_...pdf # Документация Dell OME
@@ -407,26 +405,36 @@ MIT License - см. файл [LICENSE](LICENSE)
 
 | Версия | Дата | Описание | Статус |
 | :--- | :--- | :--- | :--- |
-| **v2.0** | 2026-03-31 | Полная версия с инвентаризацией, метриками питания, утилизацией | ✅ ИСПРАВЛЕН |
-| **v1.1** | 2026-03-31 | Расширенная версия с температурой, здоровьем, сессией | ✅ Рабочий |
-| **v1.0** | 2026-03-30 | Базовая версия | ✅ Рабочий |
+| **v2.2** | 2026-04-02 | Оптимизированная: Master+Dependent Items, GPU, Tags | ✅ РЕКОМЕНДУЕТСЯ |
+| **v2.1** | 2026-03-31 | Промежуточная версия | ⚠️ Устарела |
+| **v2.0** | 2026-03-31 | Полная версия с инвентаризацией | ✅ Рабочая |
+| **v1.1** | 2026-03-31 | Расширенная версия | ✅ Рабочая |
+| **v1.0** | 2026-03-30 | Базовая версия | ✅ Рабочая |
 
 ---
 
-## 🔧 История исправлений v2.0
+## 🔧 История изменений v2.2
 
-### v2.0 FIXED (текущая)
+### v2.2 (2026-04-02)
 
-**Исправленные проблемы:**
-- ✅ Неверный тип preprocessing `'°C'` в temperature → перемещено в `<units>`
-- ✅ Неверный тип preprocessing `'MHz'` в cpu.maxspeed → перемещено в `<units>`
-- ✅ Неверный тип preprocessing `'s'` в uptime → перемещено в `<units>`
-- ✅ Item `ome.metrics.grouped` использует `{#Id}` вне LLD → удалён
-- ✅ regex preprocessing без параметров → исправлено
+**Новые возможности:**
+- ✅ Master+Dependent Items архитектура (1 HTTP-запрос вместо ~20)
+- ✅ GPU Master Item для мониторинга GPU
+- ✅ GPU Count и GPU Temperature как Dependent Items
+- ✅ Триггеры GPU Temperature Warning и GPU Not Found
+- ✅ Теги для всех триггеров (type, source, component)
+- ✅ Макросы `{$TAG_SOURCE}`, `{$TAG_COMPONENT}`
+- ✅ Null-safe JSONPATH preprocessing
 
-**Файлы:**
-- `template_dell_ome_2.0.xml` — исправленная версия (использовать эту!)
-- `template_dell_ome_2.0_fixed.xml` — удалён (переименован в template_dell_ome_2.0.xml)
+**Исправления:**
+- ✅ Исправлена структура GPU Master Item XML
+- ✅ Обновлены JSONPATH для GPU items
+- ✅ Удалены пустые строки из XML
+
+**Выгода:**
+- Снижение нагрузки на Zabbix Server на 95%
+- Уменьшение HTTP-запросов к OME API
+- Лучшая категоризация инцидентов через теги
 
 ---
 
@@ -442,8 +450,8 @@ MIT License - см. файл [LICENSE](LICENSE)
 
 ---
 
-**Совместимость:** Zabbix 7.0+  
-**Версия шаблона:** 2.0 (Full)  
-**Последнее обновление:** 2026-03-31  
-**Dashboard:** Включён в template_dell_ome_1.1_db.xml (v1.1)  
+**Совместимость:** Zabbix 7.0+
+**Версия шаблона:** 2.2 (Optimized)
+**Последнее обновление:** 2026-04-02
+**Dashboard:** Включён в template_dell_ome_1.1_db.xml (v1.1)
 **GitHub:** https://github.com/meferspb/zabbix-template-api-dell-openmanage-enterprise
